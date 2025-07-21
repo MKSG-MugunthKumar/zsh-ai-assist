@@ -1,0 +1,30 @@
+# Example PKGBUILD for Arch User Repository (AUR)
+# Maintainer: Your Name <your.email@example.com>
+
+pkgname=zsh-ai-assist
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="AI-powered command generation and error fixing using Claude AI"
+arch=('any')
+url="https://github.com/MKSG-MugunthKumar/zsh-ai-assist"
+license=('MIT')
+depends=('zsh' 'curl' 'jq')
+optdepends=('fish: for fish shell support'
+            'oh-my-zsh: for oh-my-zsh integration')
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
+sha256sums=('REPLACE_WITH_ACTUAL_SHA256')
+
+package() {
+    cd "$srcdir/$pkgname-$pkgver"
+    
+    # Install zsh plugin
+    install -Dm644 zsh-ai-assist.plugin.zsh "$pkgdir/usr/share/zsh/plugins/zsh-ai-assist/zsh-ai-assist.plugin.zsh"
+    
+    # Install fish functions
+    install -Dm644 functions/ask_claude.fish "$pkgdir/usr/share/fish/vendor_functions.d/ask_claude.fish"
+    install -Dm644 conf.d/zsh_ai_assist.fish "$pkgdir/usr/share/fish/vendor_conf.d/zsh_ai_assist.fish"
+    
+    # Install documentation
+    install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+    install -Dm644 CLAUDE.md "$pkgdir/usr/share/doc/$pkgname/CLAUDE.md"
+}

@@ -1,0 +1,62 @@
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# IDE/Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+*.sublime-*
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+.tmp/
+
+# Logs
+*.log
+logs/
+
+# API keys and secrets (just in case)
+.env
+.env.local
+.env.*.local
+secrets.txt
+api_keys.txt
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Test files
+test_output/
+*.test

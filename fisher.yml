@@ -1,0 +1,6 @@
+name: zsh-ai-assist
+description: AI-powered command generation and error fixing using Claude AI
+author: MKSG-MugunthKumar
+homepage: https://github.com/MKSG-MugunthKumar/zsh-ai-assist
+version: 1.0.0
+shell: fish
