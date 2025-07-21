@@ -300,7 +300,23 @@ The plugin:
 
 ## Contributors
 
-MKSG Mugunth Kumar 20%
-Claude Code 80%
+### 👨‍💻 Human Contributors
 
-Yup that's the world we live in now. A huge chunk of heavy lifting around converting a simple function into a full-fledged plugin was done by Claude Code (Using Sonnet 4). This AI assistant helped architect the plugin structure, implement multi-shell support, create comprehensive installation methods, and write this very README file that you are reading.
+- **[MKSG Mugunth Kumar](https://github.com/MKSG-MugunthKumar)** - Original concept, core logic, and project maintenance
+
+### 🤖 AI Contributors
+
+- **Claude Code (Sonnet 4)** - Plugin architecture, multi-shell support, installation methods, and documentation
+
+This project represents a collaborative effort between human creativity and AI capability. The original idea and core functionality came from human insight, while the AI assistant helped scale it into a comprehensive, well-documented plugin with broad compatibility and professional polish.
+
+### 🤝 Want to Contribute?
+
+We welcome contributions from the community! Whether you're fixing bugs, adding features, improving documentation, or testing on different systems, your help is appreciated. Feel free to:
+
+- Open an issue for bug reports or feature requests
+- Submit pull requests for improvements
+- Test the plugin on different OS distributions
+- Share feedback and suggestions
+
+Together, we can make command-line productivity even better! 🚀
