@@ -47,12 +47,14 @@ sudo dnf install curl jq
 First, set up your API key:
 
 **For zsh**, add to your `~/.zshrc`:
+
 ```bash
 export CLAUDE_API_KEY="YOUR-API-KEY" # Replace with your actual API key. It should start with "sk-ant-"
 export CLAUDE_MODEL="claude-sonnet-4-20250514"  # Optional, this is the default
 ```
 
 **For fish**, add to your fish config:
+
 ```fish
 set -gx CLAUDE_API_KEY "YOUR-API-KEY" # Replace with your actual API key. It should start with "sk-ant-"
 set -gx CLAUDE_MODEL "claude-sonnet-4-20250514"  # Optional, this is the default
@@ -61,37 +63,46 @@ set -gx CLAUDE_MODEL "claude-sonnet-4-20250514"  # Optional, this is the default
 ### Zsh Package Managers
 
 **Oh My Zsh:**
+
 ```bash
 git clone https://github.com/MKSG-MugunthKumar/zsh-ai-assist ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-ai-assist
 ```
+
 Then add `zsh-ai-assist` to your plugins list in `~/.zshrc`:
+
 ```bash
 plugins=(... zsh-ai-assist)
 ```
 
 **Antigen:**
+
 ```bash
 antigen bundle MKSG-MugunthKumar/zsh-ai-assist
 ```
 
 **Zinit:**
+
 ```bash
 zinit load MKSG-MugunthKumar/zsh-ai-assist
 ```
 
 **Antibody:**
+
 ```bash
 antibody bundle MKSG-MugunthKumar/zsh-ai-assist
 ```
 
 **Prezto:**
 Add to your `.zpreztorc`:
+
 ```bash
 zstyle ':prezto:load' pmodule \
   ... \
   'zsh-ai-assist'
 ```
+
 Then clone to the contrib directory:
+
 ```bash
 git clone https://github.com/MKSG-MugunthKumar/zsh-ai-assist ~/.zprezto/contrib/zsh-ai-assist
 ```
@@ -117,11 +128,13 @@ source ~/.zshrc
 For fish users, you can install this plugin using Fisher, or manually:
 
 **Using Fisher (Recommended):**
+
 ```fish
 fisher install MKSG-MugunthKumar/zsh-ai-assist
 ```
 
 **Manual Installation:**
+
 ```fish
 # Clone the repository
 git clone https://github.com/MKSG-MugunthKumar/zsh-ai-assist ~/.config/fish/plugins/zsh-ai-assist
@@ -140,6 +153,7 @@ source ~/.config/fish/config.fish
 For Homebrew distribution, you have two options:
 
 1. **Create a Homebrew Tap** (your own repository):
+
    ```bash
    # Create a tap repository: homebrew-YOUR-TAP-NAME
    # Users install with: brew install MKSG-MugunthKumar/YOUR-TAP-NAME/zsh-ai-assist
@@ -153,6 +167,7 @@ For Homebrew distribution, you have two options:
 Create a PKGBUILD file for Arch Linux users to install via `yay` or `pacman`.
 
 **Package Managers Support Status:**
+
 - ✅ **Automatic Support**: Antigen, Zinit, Antibody, Oh-my-zsh (any that source `.plugin.zsh`)
 - 📝 **Requires Submission**: Homebrew, AUR, apt repositories
 - 🐟 **Fish-specific**: Fisher (already supported)
@@ -162,6 +177,7 @@ Create a PKGBUILD file for Arch Linux users to install via `yay` or `pacman`.
 ### Basic Command Generation
 
 **For zsh users**, use the `?` function to ask for commands:
+
 ```bash
 ? flush DNS cache
 ? install docker on ubuntu
@@ -171,6 +187,7 @@ Create a PKGBUILD file for Arch Linux users to install via `yay` or `pacman`.
 ```
 
 **For fish users**, use the `ask_claude` function:
+
 ```fish
 ask_claude flush DNS cache
 ask_claude install docker on ubuntu
@@ -180,6 +197,7 @@ ask_claude compress a directory with tar
 ```
 
 You can also use the `?` abbreviation in fish (note: no space after `?`):
+
 ```fish
 ? flush DNS cache
 ```
@@ -187,6 +205,7 @@ You can also use the `?` abbreviation in fish (note: no space after `?`):
 ### Error Fixing (The Magic `??` Command)
 
 **For zsh users**, when a command fails, simply type `??`:
+
 ```bash
 # Command fails
 $ docker container ls
@@ -199,6 +218,7 @@ $ ??
 ```
 
 **For fish users**, use `fix_last_command` or the `??` abbreviation:
+
 ```fish
 # Command fails
 $ docker container ls
@@ -259,11 +279,13 @@ The plugin:
 ## Shell Compatibility
 
 ### zsh Support
+
 - **oh-my-zsh**: Full plugin support with `zsh-ai-assist.plugin.zsh`
 - **Manual zsh**: Source the plugin file directly
 - **Aliases**: `?` and `??` work as expected
 
 ### fish Support
+
 - **Fisher**: Install via `fisher install MKSG-MugunthKumar/zsh-ai-assist`
 - **Manual**: Copy functions and config files to appropriate fish directories
 - **Functions**: `ask_claude` and `fix_last_command`
@@ -271,9 +293,14 @@ The plugin:
 
 ### Function Name Reference
 
-| Action | zsh | fish |
-|--------|-----|------|
-| Ask for command | `?` | `ask_claude` or `?` |
+| Action           | zsh  | fish                       |
+| ---------------- | ---- | -------------------------- |
+| Ask for command  | `?`  | `ask_claude` or `?`        |
 | Fix last command | `??` | `fix_last_command` or `??` |
 
-## System Support
+## Contributors
+
+MKSG Mugunth Kumar 20%
+Claude Code 80%
+
+Yup that's the world we live in now. A huge chunk of heavy lifting around converting a simple function into a full-fledged plugin was done by Claude Code (Using Sonnet 4). This AI assistant helped architect the plugin structure, implement multi-shell support, create comprehensive installation methods, and write this very README file that you are reading.
