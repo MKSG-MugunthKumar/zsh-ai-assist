@@ -53,23 +53,21 @@ function ask-claude() {
     fi
 
     # Check API key
-    if [[ -z "$CLAUDE_API_KEY" ]]; then
-        echo -e "\033[31mError: CLAUDE_API_KEY is not set.\033[0m"
+    if [[ -z "$ANTHROPIC_API_KEY" ]]; then
+        echo -e "\033[31mError: ANTHROPIC_API_KEY is not set.\033[0m"
         echo "Add this to your ~/.zshrc file:"
-        echo -e "\033[32mexport CLAUDE_API_KEY=\"your-api-key\"\033[0m"
+        echo -e "\033[32mexport ANTHROPIC_API_KEY=\"your-api-key\"\033[0m"
         return 1
     fi
 
-    # Validate API key format - use string comparison instead of regex
-    if [[ "${CLAUDE_API_KEY:0:7}" != "sk-ant-" ]]; then
-        echo -e "\033[31mError: CLAUDE_API_KEY appears to be invalid.\033[0m"
-        echo "API key should start with 'sk-ant-'"
-        return 1
+    # Set default base URL if not set
+    if [[ -z "$ANTHROPIC_BASE_URL" ]]; then
+        export ANTHROPIC_BASE_URL="https://api.anthropic.com"
     fi
 
     # Set default model if not set
-    if [[ -z "$CLAUDE_MODEL" ]]; then
-        export CLAUDE_MODEL="claude-sonnet-4-20250514"
+    if [[ -z "$ANTHROPIC_MODEL" ]]; then
+        export ANTHROPIC_MODEL="claude-sonnet-4-20250514"
     fi
 
     # Concatenate all arguments as the user prompt
@@ -93,7 +91,7 @@ EOF
     # Use tool-based approach for structured response
     local json_payload=$(cat <<EOF
 {
-    "model": "$CLAUDE_MODEL",
+    "model": "$ANTHROPIC_MODEL",
     "max_tokens": 1024,
     "temperature": 0.2,
     "system": "$system_instruction",
@@ -116,8 +114,8 @@ EOF
 )
 
     local response=$(curl -s \
-        "https://api.anthropic.com/v1/messages" \
-        -H "x-api-key: $CLAUDE_API_KEY" \
+        "$ANTHROPIC_BASE_URL/v1/messages" \
+        -H "x-api-key: $ANTHROPIC_API_KEY" \
         -H "anthropic-version: 2023-06-01" \
         -H "content-type: application/json" \
         -d "$json_payload")

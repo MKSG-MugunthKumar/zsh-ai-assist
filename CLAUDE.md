@@ -40,8 +40,9 @@ Since this is a zsh plugin with no build process, testing is done by:
 
 The plugin requires:
 
-- `CLAUDE_API_KEY`: Anthropic API key (must start with "sk-ant-")
-- `CLAUDE_MODEL`: Optional, defaults to "claude-sonnet-4-20250514"
+- `ANTHROPIC_API_KEY`: Anthropic API key (must start with "sk-ant-")
+- `ANTHROPIC_MODEL`: Optional, defaults to "claude-sonnet-4-20250514"
+- `ANTHROPIC_BASE_URL`: Optional, defaults to "https://api.anthropic.com"
 - System dependencies: `curl` and `jq`
 
 ## Key Implementation Details

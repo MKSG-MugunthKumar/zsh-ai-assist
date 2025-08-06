@@ -35,8 +35,8 @@ class ZshAiAssist < Formula
         
       Then add 'zsh-ai-assist' to your plugins array in ~/.zshrc
 
-      Don't forget to set your CLAUDE_API_KEY:
-        export CLAUDE_API_KEY="your-api-key-here"
+      Don't forget to set your ANTHROPIC_API_KEY:
+        export ANTHROPIC_API_KEY="your-api-key-here"
     EOS
   end
 
