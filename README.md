@@ -50,17 +50,17 @@ First, set up your API key:
 **For zsh**, add to your `~/.zshrc`:
 
 ```bash
-export CLAUDE_API_KEY="YOUR-API-KEY" # Replace with your actual API key. It should start with "sk-ant-"
-export CLAUDE_MODEL="claude-sonnet-4-20250514"  # Optional, this is the default
-export CLAUDE_API_ENDPOINT="https://api.anthropic.com/v1/messages"  # Optional, for custom API endpoints
+export ANTHROPIC_API_KEY="YOUR-API-KEY" # Replace with your actual API key. It should start with "sk-ant-"
+export ANTHROPIC_MODEL="claude-sonnet-4-20250514"  # Optional, this is the default
+export ANTHROPIC_BASE_URL="https://api.anthropic.com"  # Optional, for custom API endpoints
 ```
 
 **For fish**, add to your fish config:
 
 ```fish
-set -gx CLAUDE_API_KEY "YOUR-API-KEY" # Replace with your actual API key. It should start with "sk-ant-"
-set -gx CLAUDE_MODEL "claude-sonnet-4-20250514"  # Optional, this is the default
-set -gx CLAUDE_API_ENDPOINT "https://api.anthropic.com/v1/messages"  # Optional, for custom API endpoints
+set -gx ANTHROPIC_API_KEY "YOUR-API-KEY" # Replace with your actual API key. It should start with "sk-ant-"
+set -gx ANTHROPIC_MODEL "claude-sonnet-4-20250514"  # Optional, this is the default
+set -gx ANTHROPIC_BASE_URL "https://api.anthropic.com"  # Optional, for custom API endpoints
 ```
 
 ### Zsh Package Managers
