@@ -65,6 +65,11 @@ function ask-claude() {
         return 1
     fi
 
+    # Set default API endpoint if not set
+    if [[ -z "$CLAUDE_API_ENDPOINT" ]]; then
+        export CLAUDE_API_ENDPOINT="https://api.anthropic.com/v1/messages"
+    fi
+
     # Validate API key format - use string comparison instead of regex
     if [[ "${CLAUDE_API_KEY:0:7}" != "sk-ant-" ]]; then
         echo -e "\033[31mError: CLAUDE_API_KEY appears to be invalid.\033[0m"
@@ -121,7 +126,7 @@ EOF
 )
 
     local response=$(curl -s \
-        "https://api.anthropic.com/v1/messages" \
+        "$CLAUDE_API_ENDPOINT" \
         -H "x-api-key: $CLAUDE_API_KEY" \
         -H "anthropic-version: 2023-06-01" \
         -H "content-type: application/json" \

@@ -42,6 +42,7 @@ The plugin requires:
 
 - `CLAUDE_API_KEY`: Anthropic API key (must start with "sk-ant-")
 - `CLAUDE_MODEL`: Optional, defaults to "claude-sonnet-4-20250514"
+- `CLAUDE_API_ENDPOINT`: Optional, defaults to "https://api.anthropic.com/v1/messages"
 - System dependencies: `curl` and `jq`
 
 ## Key Implementation Details

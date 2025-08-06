@@ -57,8 +57,8 @@ function ask_claude -d "Generate commands using Claude AI"
         return 1
     end
 
-    # Check API key
-    if not set -q CLAUDE_API_KEY
+    # Check if API key is set
+    if test -z "$CLAUDE_API_KEY"
         set_color red
         echo "Error: CLAUDE_API_KEY is not set."
         set_color normal
@@ -67,6 +67,11 @@ function ask_claude -d "Generate commands using Claude AI"
         echo "set -gx CLAUDE_API_KEY \"your-api-key\""
         set_color normal
         return 1
+    end
+
+    # Set default API endpoint if not set
+    if test -z "$CLAUDE_API_ENDPOINT"
+        set -gx CLAUDE_API_ENDPOINT "https://api.anthropic.com/v1/messages"
     end
 
     # Validate API key format
@@ -119,8 +124,8 @@ function ask_claude -d "Generate commands using Claude AI"
         "tool_choice": {"type": "tool", "name": "shell_command"}
     }' $CLAUDE_MODEL $system_instruction $user_prompt)
 
-    set -l response (curl -s \
-        "https://api.anthropic.com/v1/messages" \
+    set response (curl -s \
+        "$CLAUDE_API_ENDPOINT" \
         -H "x-api-key: $CLAUDE_API_KEY" \
         -H "anthropic-version: 2023-06-01" \
         -H "content-type: application/json" \
@@ -162,7 +167,7 @@ end
 function fix_last_command -d "Fix the last failed command using Claude AI"
     # Get the last command from history
     set -l last_cmd (history | head -n 1)
-    
+
     # Remove leading/trailing whitespace
     set last_cmd (string trim $last_cmd)
 
