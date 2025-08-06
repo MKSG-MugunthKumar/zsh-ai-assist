@@ -74,14 +74,7 @@ function ask_claude -d "Generate commands using Claude AI"
         set -gx CLAUDE_API_ENDPOINT "https://api.anthropic.com/v1/messages"
     end
 
-    # Validate API key format
-    if not string match -q "sk-ant-*" $CLAUDE_API_KEY
-        set_color red
-        echo "Error: CLAUDE_API_KEY appears to be invalid."
-        set_color normal
-        echo "API key should start with 'sk-ant-'"
-        return 1
-    end
+    
 
     # Set default model if not set
     if not set -q CLAUDE_MODEL

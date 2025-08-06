@@ -70,12 +70,7 @@ function ask-claude() {
         export CLAUDE_API_ENDPOINT="https://api.anthropic.com/v1/messages"
     fi
 
-    # Validate API key format - use string comparison instead of regex
-    if [[ "${CLAUDE_API_KEY:0:7}" != "sk-ant-" ]]; then
-        echo -e "\033[31mError: CLAUDE_API_KEY appears to be invalid.\033[0m"
-        echo "API key should start with 'sk-ant-'"
-        return 1
-    fi
+    
 
     # Set default model if not set
     if [[ -z "$CLAUDE_MODEL" ]]; then
