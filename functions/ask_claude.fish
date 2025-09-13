@@ -124,7 +124,7 @@ function ask_claude -d "Generate commands using Claude AI"
         -H "x-api-key: $CLAUDE_API_KEY" \
         -H "anthropic-version: 2023-06-01" \
         -H "content-type: application/json" \
-        -d $json_payload)
+        -d "$json_payload")
 
     # Check for API errors
     if echo $response | jq -e '.error' >/dev/null 2>&1
