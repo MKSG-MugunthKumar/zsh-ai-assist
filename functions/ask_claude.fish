@@ -80,7 +80,7 @@ function ask_claude -d "Generate commands using Claude AI"
 
     # Set default model if not set
     if not set -q CLAUDE_MODEL
-        set -gx CLAUDE_MODEL "claude-sonnet-4-20250514"
+        set -gx CLAUDE_MODEL "claude-sonnet-4-5-20250929"
     end
 
     # Join all arguments as the user prompt
@@ -97,34 +97,38 @@ function ask_claude -d "Generate commands using Claude AI"
 
     set -l system_instruction "Generate shell commands for $system_detail for $shell_type only. $os_examples. Use the shell_command tool to provide your response."
 
-    # Create JSON payload
-    set -l json_payload (printf '{
-        "model": "%s",
-        "max_tokens": 1024,
-        "temperature": 0.2,
-        "system": "%s",
-        "messages": [{"role": "user", "content": "%s"}],
-        "tools": [{
-            "name": "shell_command",
-            "description": "Generate OS-specific shell command",
-            "input_schema": {
-                "type": "object",
-                "properties": {
-                    "command": {"type": "string"},
-                    "os": {"type": "string", "enum": ["macOS", "linux", "windows"]}
-                },
-                "required": ["command", "os"]
-            }
-        }],
-        "tool_choice": {"type": "tool", "name": "shell_command"}
-    }' $CLAUDE_MODEL $system_instruction $user_prompt)
+    # Create JSON payload using jq for proper escaping
+    set -l json_payload (jq -n \
+        --arg model "$CLAUDE_MODEL" \
+        --arg system "$system_instruction" \
+        --arg user_prompt "$user_prompt" \
+        '{
+            "model": $model,
+            "max_tokens": 1024,
+            "temperature": 0.2,
+            "system": $system,
+            "messages": [{"role": "user", "content": $user_prompt}],
+            "tools": [{
+                "name": "shell_command",
+                "description": "Generate OS-specific shell command",
+                "input_schema": {
+                    "type": "object",
+                    "properties": {
+                        "command": {"type": "string"},
+                        "os": {"type": "string", "enum": ["macOS", "linux", "windows"]}
+                    },
+                    "required": ["command", "os"]
+                }
+            }],
+            "tool_choice": {"type": "tool", "name": "shell_command"}
+        }')
 
     set -l response (curl -s \
         "https://api.anthropic.com/v1/messages" \
         -H "x-api-key: $CLAUDE_API_KEY" \
         -H "anthropic-version: 2023-06-01" \
         -H "content-type: application/json" \
-        -d $json_payload)
+        -d "$json_payload")
 
     # Check for API errors
     if echo $response | jq -e '.error' >/dev/null 2>&1
