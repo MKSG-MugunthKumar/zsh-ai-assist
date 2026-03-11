@@ -91,29 +91,31 @@ EOF
 )
 
     # Use tool-based approach for structured response
-    local json_payload=$(cat <<EOF
-{
-    "model": "$CLAUDE_MODEL",
-    "max_tokens": 1024,
-    "temperature": 0.2,
-    "system": "$system_instruction",
-    "messages": [{"role": "user", "content": "$user_prompt"}],
-    "tools": [{
-        "name": "shell_command",
-        "description": "Generate OS-specific shell command",
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "command": {"type": "string"},
-                "os": {"type": "string", "enum": ["macOS", "linux", "windows"]}
-            },
-            "required": ["command", "os"]
-        }
-    }],
-    "tool_choice": {"type": "tool", "name": "shell_command"}
-}
-EOF
-)
+    # Build JSON payload using jq to properly escape all strings
+    local json_payload=$(jq -n \
+        --arg model "$CLAUDE_MODEL" \
+        --arg system "$system_instruction" \
+        --arg prompt "$user_prompt" \
+        '{
+            model: $model,
+            max_tokens: 1024,
+            temperature: 0.2,
+            system: $system,
+            messages: [{role: "user", content: $prompt}],
+            tools: [{
+                name: "shell_command",
+                description: "Generate OS-specific shell command",
+                input_schema: {
+                    type: "object",
+                    properties: {
+                        command: {type: "string"},
+                        os: {type: "string", enum: ["macOS", "linux", "windows"]}
+                    },
+                    required: ["command", "os"]
+                }
+            }],
+            tool_choice: {type: "tool", name: "shell_command"}
+        }')
 
     local response=$(curl -s \
         "https://api.anthropic.com/v1/messages" \
@@ -168,11 +170,8 @@ function fix-last-command() {
 
     echo -e "\033[33m🔍 Analyzing failed command:\033[0m $last_cmd"
 
-    # Simple string concatenation instead of jq escaping
-    local fix_prompt="The command '$last_cmd' failed. Please provide a corrected version or alternative approach."
-
     # Call the ? function with the fix prompt
-    ask-claude "$fix_prompt"
+    ask-claude "The following command failed. Please provide a corrected version or alternative approach." "Command:" "$last_cmd"
 }
 
 alias "?"="ask-claude"
