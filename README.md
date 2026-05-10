@@ -13,12 +13,13 @@ A shell plugin that leverages Claude AI to generate contextually accurate termin
 - **Safe execution**: Commands are placed on prompt for review, never auto-executed
 - **Natural language**: Ask questions in plain English
 - **Context-aware**: The `??` function analyzes your last failed command
-- **Configurable API endpoint**: Support for custom Anthropic API endpoints
+- **Configurable API endpoint**: Support for custom API endpoints (Anthropic or OpenAI)
+- **Multi-provider support**: Switch between Anthropic (Claude) and OpenAI (GPT) models
 
 ## Prerequisites
 
 - **zsh** or **fish** shell installed and configured
-- An Anthropic API key (Get one from [Anthropic Console](https://console.anthropic.com/settings/keys))
+- An API key from [Anthropic](https://console.anthropic.com/settings/keys) or [OpenAI](https://platform.openai.com/api-keys)
 - `curl` and `jq` installed on your system
 
 ### Installing Dependencies
@@ -45,23 +46,32 @@ sudo dnf install curl jq
 
 ### Environment Setup (Required for both shells)
 
-First, set up your API key:
+First, choose your provider and set up your API key:
 
 **For zsh**, add to your `~/.zshrc`:
 
 ```bash
-export ANTHROPIC_API_KEY="YOUR-API-KEY" # Replace with your actual API key. It should start with "sk-ant-"
-export ANTHROPIC_MODEL="claude-sonnet-4-20250514"  # Optional, this is the default
-export ANTHROPIC_BASE_URL="https://api.anthropic.com"  # Optional, for custom API endpoints
+export ZSH_AI_ASSIST_PROVIDER="anthropic"  # or "openai"
+export ZSH_AI_ASSIST_API_KEY="YOUR-API-KEY"
+export ZSH_AI_ASSIST_MODEL="claude-sonnet-4-20250514"  # Optional, provider-specific default
+export ZSH_AI_ASSIST_BASE_URL="https://api.anthropic.com"  # Optional, provider-specific default
 ```
 
 **For fish**, add to your fish config:
 
 ```fish
-set -gx ANTHROPIC_API_KEY "YOUR-API-KEY" # Replace with your actual API key. It should start with "sk-ant-"
-set -gx ANTHROPIC_MODEL "claude-sonnet-4-20250514"  # Optional, this is the default
-set -gx ANTHROPIC_BASE_URL "https://api.anthropic.com"  # Optional, for custom API endpoints
+set -gx ZSH_AI_ASSIST_PROVIDER "anthropic"  # or "openai"
+set -gx ZSH_AI_ASSIST_API_KEY "YOUR-API-KEY"
+set -gx ZSH_AI_ASSIST_MODEL "claude-sonnet-4-20250514"  # Optional, provider-specific default
+set -gx ZSH_AI_ASSIST_BASE_URL "https://api.anthropic.com"  # Optional, provider-specific default
 ```
+
+### Provider Defaults
+
+| Provider    | Default Base URL                    | Default Model              |
+|-------------|------------------------------------|----------------------------|
+| `anthropic` | `https://api.anthropic.com`        | `claude-sonnet-4-20250514` |
+| `openai`    | `https://api.openai.com`           | `gpt-4o`                   |
 
 ### Zsh Package Managers
 
@@ -273,7 +283,9 @@ The plugin:
    - Linux: Distribution and version (Ubuntu 22.04, Fedora 39, etc.)
    - Windows: PowerShell-optimized commands
 
-2. **AI Integration**: Uses Claude AI with structured prompts to ensure OS-appropriate commands
+2. **AI Integration**: Uses Claude AI or OpenAI with structured prompts to ensure OS-appropriate commands
+
+3. **Provider Support**: Switch between `anthropic` (Claude) and `openai` (GPT) via `ZSH_AI_ASSIST_PROVIDER`
 
 3. **Error Analysis**: The `??` function captures your last command and asks Claude to fix it
 
