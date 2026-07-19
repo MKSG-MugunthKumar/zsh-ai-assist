@@ -11,9 +11,13 @@ This is a zsh plugin that provides AI-powered command generation and error fixin
 
 ## Architecture
 
-The codebase consists of a single main file:
+The plugin logic is duplicated across three parallel implementations. **When changing behavior, update all three** (they do not share code):
 
-- `main.zsh`: Contains all plugin functionality including system detection, API communication, and command generation
+- `zsh-ai-assist.plugin.zsh`: The canonical zsh plugin — this is what Homebrew, the AUR PKGBUILD, and zsh plugin managers actually install and source.
+- `functions/ask_claude.fish` (with `conf.d/zsh_ai_assist.fish`): The fish shell port.
+- `main.zsh`: A standalone/reference copy of the zsh logic; not sourced by the installed plugin.
+
+Each contains the full plugin functionality including system detection, API communication, and command generation.
 
 Key architectural components:
 
@@ -41,7 +45,8 @@ Since this is a zsh plugin with no build process, testing is done by:
 The plugin requires:
 
 - `CLAUDE_API_KEY`: Anthropic API key (must start with "sk-ant-")
-- `CLAUDE_MODEL`: Optional, defaults to "claude-sonnet-4-20250514"
+- `CLAUDE_API_KEY_FILE`: Optional, path to a file containing the API key; used only when `CLAUDE_API_KEY` is unset. If it too is unset, the key is read from the default `${XDG_CONFIG_HOME:-$HOME/.config}/zsh-ai-assist/api-key`
+- `CLAUDE_MODEL`: Optional, defaults to "claude-sonnet-5"
 - System dependencies: `curl` and `jq`
 
 ## Key Implementation Details
@@ -51,3 +56,4 @@ The plugin requires:
 - The `??` function analyzes command history to avoid fixing itself recursively
 - All commands are OS-specific with appropriate examples and validation
 - Temperature is set to 0.2 for consistent, deterministic command suggestions
+- When the API key is loaded from a file, its permissions are checked via zsh's `zstat`; a warning is printed (but not fatal) if it is group/other-accessible. Note octal masks in zsh math must use `8#NN` notation since `OCTAL_ZEROES` is off by default

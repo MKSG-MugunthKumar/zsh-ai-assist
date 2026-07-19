@@ -57,11 +57,39 @@ function ask-claude() {
         return 1
     fi
 
+    # Fall back to reading the API key from a file if the env variable is not set.
+    # Precedence: CLAUDE_API_KEY -> CLAUDE_API_KEY_FILE -> XDG config default.
+    if [[ -z "$CLAUDE_API_KEY" ]]; then
+        local key_file="${CLAUDE_API_KEY_FILE:-${XDG_CONFIG_HOME:-$HOME/.config}/zsh-ai-assist/api-key}"
+        # -s tests that the file both exists and is non-empty; otherwise CLAUDE_API_KEY
+        # stays unset and the check below shows the standard error message.
+        if [[ -s "$key_file" ]]; then
+            # Warn (but don't fail) if the key file is readable by group/others.
+            # Uses zsh's stat module so it works the same on macOS and Linux.
+            zmodload -F zsh/stat b:zstat 2>/dev/null
+            if (( $+builtins[zstat] )); then
+                local -a key_stat
+                zstat -A key_stat +mode "$key_file" 2>/dev/null
+                # 8#77 = octal 077; zsh math treats a bare leading 0 as decimal
+                # unless OCTAL_ZEROES is set, so use explicit base notation.
+                if (( ${#key_stat} && (key_stat[1] & 8#77) )); then
+                    echo -e "\033[33mWarning: $key_file is readable by other users.\033[0m" >&2
+                    echo -e "\033[33mRestrict it with: chmod 600 $key_file\033[0m" >&2
+                fi
+            fi
+            CLAUDE_API_KEY="$(<"$key_file")"
+            CLAUDE_API_KEY="${CLAUDE_API_KEY//[[:space:]]/}"  # strip any surrounding whitespace/newlines
+        fi
+    fi
+
     # Check API key
     if [[ -z "$CLAUDE_API_KEY" ]]; then
         echo -e "\033[31mError: CLAUDE_API_KEY is not set.\033[0m"
         echo "Add this to your ~/.zshrc file:"
         echo -e "\033[32mexport CLAUDE_API_KEY=\"your-api-key\"\033[0m"
+        echo "Or save the key to a file (either location works):"
+        echo -e "\033[32m  ${XDG_CONFIG_HOME:-$HOME/.config}/zsh-ai-assist/api-key\033[0m"
+        echo -e "\033[32m  export CLAUDE_API_KEY_FILE=\"/path/to/your/key\"  # custom location\033[0m"
         return 1
     fi
 
@@ -74,7 +102,7 @@ function ask-claude() {
 
     # Set default model if not set
     if [[ -z "$CLAUDE_MODEL" ]]; then
-        export CLAUDE_MODEL="claude-sonnet-4-20250514"
+        export CLAUDE_MODEL="claude-sonnet-5"
     fi
 
     # Concatenate all arguments as the user prompt

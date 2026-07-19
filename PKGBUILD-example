@@ -2,7 +2,7 @@
 # Maintainer: Your Name <your.email@example.com>
 
 pkgname=zsh-ai-assist
-pkgver=1.0.0
+pkgver=1.1.0
 pkgrel=1
 pkgdesc="AI-powered command generation and error fixing using Claude AI"
 arch=('any')
