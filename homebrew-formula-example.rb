@@ -4,7 +4,7 @@
 class ZshAiAssist < Formula
   desc "AI-powered command generation and error fixing using Claude AI"
   homepage "https://github.com/MKSG-MugunthKumar/zsh-ai-assist"
-  url "https://github.com/MKSG-MugunthKumar/zsh-ai-assist/archive/refs/tags/v1.0.0.tar.gz"
+  url "https://github.com/MKSG-MugunthKumar/zsh-ai-assist/archive/refs/tags/v1.1.0.tar.gz"
   sha256 "REPLACE_WITH_ACTUAL_SHA256"
   license "MIT"
 

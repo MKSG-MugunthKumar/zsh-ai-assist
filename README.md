@@ -50,15 +50,26 @@ First, set up your API key:
 
 ```bash
 export CLAUDE_API_KEY="YOUR-API-KEY" # Replace with your actual API key. It should start with "sk-ant-"
-export CLAUDE_MODEL="claude-sonnet-4-20250514"  # Optional, this is the default
+# Alternatively, keep the key out of your environment by saving it to a file. If
+# CLAUDE_API_KEY is unset, the key is read from CLAUDE_API_KEY_FILE, or from the
+# default ${XDG_CONFIG_HOME:-$HOME/.config}/zsh-ai-assist/api-key if that is unset.
+# export CLAUDE_API_KEY_FILE="/path/to/your/key"  # optional, overrides the default location
+export CLAUDE_MODEL="claude-sonnet-5"  # Optional, this is the default
 ```
 
 **For fish**, add to your fish config:
 
 ```fish
 set -gx CLAUDE_API_KEY "YOUR-API-KEY" # Replace with your actual API key. It should start with "sk-ant-"
-set -gx CLAUDE_MODEL "claude-sonnet-4-20250514"  # Optional, this is the default
+# Alternatively, keep the key out of your environment by saving it to a file. If
+# CLAUDE_API_KEY is unset, the key is read from CLAUDE_API_KEY_FILE, or from the
+# default ~/.config/zsh-ai-assist/api-key (honors XDG_CONFIG_HOME) if that is unset.
+# set -gx CLAUDE_API_KEY_FILE "/path/to/your/key"  # optional, overrides the default location
+set -gx CLAUDE_MODEL "claude-sonnet-5"  # Optional, this is the default
 ```
+
+> **Security note:** When using a key file, restrict it to your user with `chmod 600 <file>`.
+> The plugin prints a warning if the file is readable by group or others.
 
 ### Zsh Package Managers
 

@@ -57,14 +57,51 @@ function ask_claude -d "Generate commands using Claude AI"
         return 1
     end
 
+    # Fall back to reading the API key from a file if the env variable is not set.
+    # Precedence: CLAUDE_API_KEY -> CLAUDE_API_KEY_FILE -> XDG config default.
+    if test -z "$CLAUDE_API_KEY"
+        set -l key_file $CLAUDE_API_KEY_FILE
+        if test -z "$key_file"
+            if set -q XDG_CONFIG_HOME
+                set key_file "$XDG_CONFIG_HOME/zsh-ai-assist/api-key"
+            else
+                set key_file "$HOME/.config/zsh-ai-assist/api-key"
+            end
+        end
+        # -s tests that the file both exists and is non-empty; otherwise
+        # CLAUDE_API_KEY stays unset and the check below shows the error message.
+        if test -s "$key_file"
+            # Warn (but don't fail) if the key file is readable by group/others.
+            # stat flags differ between Linux (-c '%a') and macOS (-f '%Lp').
+            set -l perms (stat -c '%a' "$key_file" 2>/dev/null)
+            if test -z "$perms"
+                set perms (stat -f '%Lp' "$key_file" 2>/dev/null)
+            end
+            if test -n "$perms"; and not string match -q '*00' -- "$perms"
+                set_color yellow
+                echo "Warning: $key_file is readable by other users." >&2
+                echo "Restrict it with: chmod 600 $key_file" >&2
+                set_color normal
+            end
+            set -gx CLAUDE_API_KEY (cat "$key_file" | string replace -ra '\s' '')
+        end
+    end
+
     # Check API key
-    if not set -q CLAUDE_API_KEY
+    if test -z "$CLAUDE_API_KEY"
         set_color red
         echo "Error: CLAUDE_API_KEY is not set."
         set_color normal
         echo "Add this to your fish config:"
         set_color green
         echo "set -gx CLAUDE_API_KEY \"your-api-key\""
+        set_color normal
+        echo "Or save the key to a file (either location works):"
+        set_color green
+        set -l cfg_dir $XDG_CONFIG_HOME
+        test -z "$cfg_dir"; and set cfg_dir "$HOME/.config"
+        echo "  $cfg_dir/zsh-ai-assist/api-key"
+        echo "  set -gx CLAUDE_API_KEY_FILE \"/path/to/your/key\"  # custom location"
         set_color normal
         return 1
     end
@@ -80,7 +117,7 @@ function ask_claude -d "Generate commands using Claude AI"
 
     # Set default model if not set
     if not set -q CLAUDE_MODEL
-        set -gx CLAUDE_MODEL "claude-sonnet-4-5-20250929"
+        set -gx CLAUDE_MODEL "claude-sonnet-5"
     end
 
     # Join all arguments as the user prompt
